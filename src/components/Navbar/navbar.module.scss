@@ -1,0 +1,26 @@
+.nav {
+  grid-area: nav;
+  background: aquamarine;
+
+  .links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    .linkItem {
+      .link {
+        padding: 15px;
+        display: block;
+        color: white;
+        transition: color 0.3s ease-in-out;
+
+        &:hover {
+          color: aqua;
+        }
+      }
+
+      .active {
+        color: green;
+      }
+    }
+  }
+}

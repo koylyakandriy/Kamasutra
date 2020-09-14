@@ -1,7 +1,7 @@
 import React from "react";
 
 import styles from "./profileInfo.module.scss";
-import Loader from "../../Loader";
+import Loader from "../../common/Loader";
 import ProfileStatus from "./profielStatus";
 
 const ProfileInfo = ({

@@ -2,15 +2,18 @@ import React, { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 
-import { getAuthUserDataThunkCreator } from "../../redux/authReducer";
+import {
+  getAuthUserDataThunkCreator,
+  logoutThunkCreator,
+} from "../../redux/authReducer";
 
 import styles from "./header.module.scss";
 
 const Header = () => {
   const dispatch = useDispatch();
-  const { isAuth, login } = useSelector(state => ({
+  const { isAuth, userName } = useSelector((state) => ({
     isAuth: state.auth.isAuth,
-    login: state.auth.login
+    userName: state.auth.login,
   }));
 
   const getAuthUserDataThunk = useCallback(() => {
@@ -19,8 +22,9 @@ const Header = () => {
 
   useEffect(() => {
     getAuthUserDataThunk();
-    // toggleIsFetching(false);
   }, [getAuthUserDataThunk]);
+
+  const logout = () => dispatch(logoutThunkCreator());
 
   return (
     <header className={styles.header}>
@@ -34,7 +38,10 @@ const Header = () => {
             Login
           </NavLink>
         ) : (
-          <span className={styles.link}>{login}</span>
+          <div>
+            <span className={styles.link}>{userName}</span> |{" "}
+            <span onClick={logout}>Logout</span>
+          </div>
         )}
       </div>
     </header>

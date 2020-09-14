@@ -8,7 +8,7 @@ import {
   setCurrentPageAction,
   successUnfollowThunkCreator
 } from "../../redux/usersReducer";
-import Loader from "../Loader";
+import Loader from "../common/Loader";
 
 const UsersContainer = () => {
   const dispatch = useDispatch();

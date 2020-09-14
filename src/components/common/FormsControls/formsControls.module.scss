@@ -1,0 +1,14 @@
+.formControl {
+  display: flex;
+  flex-direction: column;
+  span {
+    color: red;
+  }
+}
+
+.error {
+  input,
+  textarea {
+    border: 1px solid red;
+  }
+}

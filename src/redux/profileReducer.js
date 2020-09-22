@@ -59,9 +59,9 @@ export const getProfileThunkCreator = id => dispatch => {
     .then(res => dispatch(setUserProfileAction(res.data)));
 };
 
-export const getProfileStatusThunkCreator = userId => dispatch => {
+export const getProfileStatusThunkCreator = id => dispatch => {
   profileAPI
-    .getStatus(userId)
+    .getStatus(id)
     .then(res => dispatch(setProfileStatusAction(res.data)));
 };
 

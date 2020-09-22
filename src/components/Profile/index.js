@@ -7,44 +7,50 @@ import MyPosts from "./MyPosts";
 import {
   getProfileStatusThunkCreator,
   getProfileThunkCreator,
-  updateProfileStatusThunkCreator
+  updateProfileStatusThunkCreator,
 } from "../../redux/profileReducer";
 
 import styles from "./profile.module.scss";
 
 const Profile = () => {
   const dispatch = useDispatch();
-  const { id } = useParams();
+  const { profileId } = useParams();
   // const id = 9713;
-  const { profile, status } = useSelector(state => ({
-    profile: state.profilePage.profile,
-    status: state.profilePage.status
-  }));
+  const { profile, status, authorizedUserId, isAuth } = useSelector(
+    (state) => ({
+      profile: state.profilePage.profile,
+      status: state.profilePage.status,
+      authorizedUserId: state.auth.userId,
+      isAuth: state.auth.isAuth,
+    })
+  );
+
+  const userId = profileId ? profileId : authorizedUserId;
 
   const getProfileThunk = useCallback(
-    id => {
+    (id) => {
       dispatch(getProfileThunkCreator(id));
     },
     [dispatch]
   );
 
   const getProfileStatusThunk = useCallback(
-    userId => {
-      dispatch(getProfileStatusThunkCreator(userId));
+    (id) => {
+      dispatch(getProfileStatusThunkCreator(id));
     },
     [dispatch]
   );
 
-  const updateProfileStatusThunk = status =>
+  const updateProfileStatusThunk = (status) =>
     dispatch(updateProfileStatusThunkCreator(status));
 
   useEffect(() => {
-    getProfileThunk(id);
-  }, [getProfileThunk, id]);
+    getProfileThunk(userId);
+  }, [getProfileThunk, userId]);
 
   useEffect(() => {
-    getProfileStatusThunk(id);
-  }, [getProfileStatusThunk, id, status]);
+    getProfileStatusThunk(userId);
+  }, [getProfileStatusThunk, userId, status]);
 
   return (
     <section className={styles.profile}>

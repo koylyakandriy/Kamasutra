@@ -18,8 +18,8 @@ export const profileAPI = {
   getProfile(id) {
     return axiosInstance.get(`profile/${id}`);
   },
-  getStatus(userId) {
-    return axiosInstance.get(`profile/status/${userId}`);
+  getStatus(id) {
+    return axiosInstance.get(`profile/status/${id}`);
   },
   updateStatus(status) {
     return axiosInstance.put(`profile/status`, { status });

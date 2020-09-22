@@ -30,7 +30,11 @@ const App = () => {
             <Route path="/users">
               <UsersContainer />
             </Route>
-            <PrivateRoute path="/profile/:id" component={Profile} />
+            <PrivateRoute
+              exect
+              path="/profile/:profileId?"
+              component={Profile}
+            />
             <PrivateRoute path="/dialogs" component={Dialogs} />
           </Switch>
         </main>

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 
 import ProfileInfo from "./ProfileInfo";
 import MyPosts from "./MyPosts";
@@ -14,8 +14,9 @@ import styles from "./profile.module.scss";
 
 const Profile = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
   const { profileId } = useParams();
-  // const id = 9713;
+
   const { profile, status, authorizedUserId, isAuth } = useSelector(
     (state) => ({
       profile: state.profilePage.profile,
@@ -45,12 +46,12 @@ const Profile = () => {
     dispatch(updateProfileStatusThunkCreator(status));
 
   useEffect(() => {
-    getProfileThunk(userId);
-  }, [getProfileThunk, userId]);
+    userId ? getProfileThunk(userId) : history.push("/login");
+  }, [history, getProfileThunk, userId]);
 
   useEffect(() => {
-    getProfileStatusThunk(userId);
-  }, [getProfileStatusThunk, userId, status]);
+    userId ? getProfileStatusThunk(userId) : history.push("/login");
+  }, [history, getProfileStatusThunk, userId, status]);
 
   return (
     <section className={styles.profile}>

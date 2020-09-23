@@ -27,12 +27,11 @@ export const setAuthUserDataAction = (userId, email, login, isAuth) => ({
 });
 
 export const getAuthUserDataThunkCreator = () => (dispatch) => {
-  authAPI.getMyProfile().then((res) => {
+  return authAPI.getMyProfile().then((res) => {
     if (res.data.resultCode === 0) {
       const { login, id, email } = res.data.data;
       dispatch(setAuthUserDataAction(id, email, login, true));
     }
-    // toggleIsFetching(false);
   });
 };
 

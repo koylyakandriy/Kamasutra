@@ -1,11 +1,8 @@
-import React, { useCallback, useEffect } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 
-import {
-  getAuthUserDataThunkCreator,
-  logoutThunkCreator,
-} from "../../redux/authReducer";
+import { logoutThunkCreator } from "../../redux/authReducer";
 
 import styles from "./header.module.scss";
 
@@ -15,14 +12,6 @@ const Header = () => {
     isAuth: state.auth.isAuth,
     userName: state.auth.login,
   }));
-
-  const getAuthUserDataThunk = useCallback(() => {
-    dispatch(getAuthUserDataThunkCreator());
-  }, [dispatch]);
-
-  useEffect(() => {
-    getAuthUserDataThunk();
-  }, [getAuthUserDataThunk]);
 
   const logout = () => dispatch(logoutThunkCreator());
 

@@ -9,6 +9,8 @@ import {
   getProfileThunkCreator,
   updateProfileStatusThunkCreator,
 } from "../../redux/profileReducer";
+import { getProfile, getStatus } from "../../redux/profileSelector";
+import { getAuthorizedUserId, getIsAuth } from "../../redux/authSelector";
 
 import styles from "./profile.module.scss";
 
@@ -19,10 +21,10 @@ const Profile = () => {
 
   const { profile, status, authorizedUserId, isAuth } = useSelector(
     (state) => ({
-      profile: state.profilePage.profile,
-      status: state.profilePage.status,
-      authorizedUserId: state.auth.userId,
-      isAuth: state.auth.isAuth,
+      profile: getProfile(state),
+      status: getStatus(state),
+      authorizedUserId: getAuthorizedUserId(state),
+      isAuth: getIsAuth(state),
     })
   );
 

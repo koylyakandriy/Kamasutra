@@ -3,14 +3,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 
 import { logoutThunkCreator } from "../../redux/authReducer";
+import { getIsAuth, getLogin } from "../../redux/authSelector";
 
 import styles from "./header.module.scss";
 
 const Header = () => {
   const dispatch = useDispatch();
   const { isAuth, userName } = useSelector((state) => ({
-    isAuth: state.auth.isAuth,
-    userName: state.auth.login,
+    isAuth: getIsAuth(state),
+    userName: getLogin(state),
   }));
 
   const logout = () => dispatch(logoutThunkCreator());

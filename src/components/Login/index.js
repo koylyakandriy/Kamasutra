@@ -4,12 +4,13 @@ import { Redirect } from "react-router-dom";
 
 import LoginForm from "./LoginForm";
 import { loginThunkCreator } from "../../redux/authReducer";
+import { getIsAuth } from "../../redux/authSelector";
 
 import styles from "./login.module.scss";
 
 const Login = () => {
   const dispatch = useDispatch();
-  const isAuth = useSelector((state) => state.auth.isAuth);
+  const isAuth = useSelector((state) => getIsAuth(state));
 
   const onSubmit = ({ email, password, rememberMe }) => {
     dispatch(loginThunkCreator(email, password, rememberMe));

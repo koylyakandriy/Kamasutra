@@ -1,10 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import styles from "./profileStatus.module.scss";
 
 const ProfileStatus = ({ status, updateProfileStatusThunk }) => {
   const [editMode, setEditMode] = useState(false);
-  const [newStatus, setNewStatus] = useState(status);
+  const [newStatus, setNewStatus] = useState('');
+
+  useEffect(() => {
+    setNewStatus(status);
+  }, [status]);
 
   const activeMode = () => {
     setEditMode(true);
@@ -22,7 +26,7 @@ const ProfileStatus = ({ status, updateProfileStatusThunk }) => {
   return (
     <div className={styles.profileStatus}>
       {!editMode ? (
-        <h4 onDoubleClick={activeMode}>{status ||  "No Status"}</h4>
+        <h4 onDoubleClick={activeMode}>{status || "No Status"}</h4>
       ) : (
         <input
           autoFocus={true}

@@ -9,6 +9,7 @@ const ProfileInfo = ({
   status,
   updateProfileStatusThunk
 }) => {
+  
   const defaultAvatar = "https://image.freepik.com/free-vector/_9385-36.jpg";
   return (
     <div className={styles.profileInfo}>

@@ -1,20 +1,19 @@
-import React from "react";
+import React, { memo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import Post from "./Post";
 import PostForm from "../PostForm";
 import { addPostAction } from "../../../redux/profileReducer";
+import { getPostData } from "../../../redux/profileSelector";
 
 import styles from "./myPosts.module.scss";
 
 const MyPosts = () => {
   const dispatch = useDispatch();
 
-  const { profilePage } = useSelector(state => ({
-    profilePage: state.profilePage
-  }));
+  const postData = useSelector((state) => getPostData(state));
 
-  const addMessage = formData => {
+  const addMessage = (formData) => {
     dispatch(addPostAction(formData.newPostText));
   };
 
@@ -25,7 +24,7 @@ const MyPosts = () => {
         <PostForm onSubmit={addMessage} />
       </div>
       <div className={styles.posts}>
-        {profilePage.postData.map(({ id, message, linksCount }) => (
+        {postData.map(({ id, message, linksCount }) => (
           <Post key={id} message={message} linksCount={linksCount} />
         ))}
       </div>
@@ -33,4 +32,4 @@ const MyPosts = () => {
   );
 };
 
-export default MyPosts;
+export default memo(MyPosts);

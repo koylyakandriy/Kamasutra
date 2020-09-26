@@ -1,83 +1,48 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
 
 import styles from "./users.module.scss";
+import Paginator from "../common/Paginator/Paginator";
+import User from "./User";
 
 const Users = ({
-  pages,
   users,
   currentPage,
   setCurrentPage,
+  totalUsers,
+  pageSize,
   successFollowThunk,
   successUnfollowThunk,
-  followingInProgress
+  followingInProgress,
 }) => {
   const defaultPhoto = "https://image.freepik.com/free-vector/_9385-36.jpg";
 
-  const onFollow = userId => {
+  const onFollow = (userId) => {
     successFollowThunk(userId);
   };
 
-  const onUnfollow = userId => {
+  const onUnfollow = (userId) => {
     successUnfollowThunk(userId);
   };
 
   return (
     <div className={styles.users}>
-      <div className={styles.pagination}>
-        {pages.map(page => (
-          <span
-            key={page}
-            className={currentPage === page ? styles.active : ""}
-            onClick={() => setCurrentPage(page)}
-          >
-            {page}
-          </span>
-        ))}
-      </div>
+      <Paginator
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        totalUsers={totalUsers}
+        pageSize={pageSize}
+      />
 
       <div className={styles.usersList}>
-        {users.map(user => (
-          <div key={user.id} className={styles.container}>
-            <span className={styles.leftGroup}>
-              <NavLink to={`/profile/${user.id}`}>
-                <img
-                  className={styles.avatar}
-                  src={user.photos.small || defaultPhoto}
-                  alt="avatar"
-                />
-              </NavLink>
-            </span>
-
-            {user.followed ? (
-              <button
-                className={styles.btn}
-                onClick={() => onUnfollow(user.id)}
-                disabled={followingInProgress.some(id => id === user.id)}
-              >
-                Unfollow
-              </button>
-            ) : (
-              <button
-                className={styles.btn}
-                onClick={() => onFollow(user.id)}
-                disabled={followingInProgress.some(id => id === user.id)}
-              >
-                Follow
-              </button>
-            )}
-
-            <span className={styles.rightGroup}>
-              <span>
-                <div>{user.name}</div>
-                <div>{user.status || "My status"}</div>
-              </span>
-              {/*<span>*/}
-              {/*  <div>{user.location.country}</div>*/}
-              {/*  <div>{user.location.city}</div>*/}
-              {/*</span>*/}
-            </span>
-          </div>
+        {users.map((user) => (
+          <User
+            key={user.id}
+            user={user}
+            defaultPhoto={defaultPhoto}
+            followingInProgress={followingInProgress}
+            onFollow={onFollow}
+            onUnfollow={onUnfollow}
+          />
         ))}
       </div>
     </div>

@@ -51,13 +51,7 @@ const UsersContainer = () => {
     [dispatch]
   );
 
-  const pagesCount = Math.ceil(totalUsers / pageSize);
-
-  let pages = [];
-  for (let i = 1; i <= pagesCount; i++) {
-    pages.push(i);
-  }
-
+ 
   useEffect(() => {
     getUsersThunk(currentPage, pageSize);
   }, [getUsersThunk, currentPage, pageSize]);
@@ -68,9 +62,10 @@ const UsersContainer = () => {
         <Loader />
       ) : (
         <Users
-          pages={pages}
           users={users}
           currentPage={currentPage}
+          pageSize={pageSize}
+          totalUsers={totalUsers}
           isFetching={isFetching}
           setCurrentPage={setCurrentPage}
           successFollowThunk={successFollowThunk}

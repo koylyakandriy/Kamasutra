@@ -1,15 +1,4 @@
 .users {
-  .pagination {
-    display: flex;
-    flex-wrap: wrap;
-    span {
-      padding: 5px;
-      cursor: pointer;
-    }
-    .active {
-      font-weight: bold;
-    }
-  }
 
   .usersList {
     display: flex;

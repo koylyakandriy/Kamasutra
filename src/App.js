@@ -1,18 +1,19 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, lazy, Suspense } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import Header from "./components/Header";
 import Navbar from "./components/Navbar";
-import UsersContainer from "./components/Users/UsersContainer";
-import Login from "./components/Login";
-import Dialogs from "./components/Dialogs";
-import Profile from "./components/Profile";
 import { PrivateRoute } from "./hoc/PriveateRoute";
 import { initializedSuccessThunkCreator } from "./redux/appReducer";
+import Loader from "./components/common/Loader";
 
 import "./App.scss";
-import Loader from "./components/common/Loader";
+
+const Profile = lazy(() => import("./components/Profile"));
+const Dialogs = lazy(() => import("./components/Dialogs"));
+const UsersContainer = lazy(() => import("./components/Users/UsersContainer"));
+const Login = lazy(() => import("./components/Login"));
 
 const App = () => {
   const dispatch = useDispatch();
@@ -38,14 +39,20 @@ const App = () => {
                 <Route exact path="/">
                   Main
                 </Route>
-                <Route exact path="/login">
-                  <Login />
-                </Route>
-                <Route path="/users">
-                  <UsersContainer />
-                </Route>
-                <Route exect path="/profile/:profileId?" component={Profile} />
-                <PrivateRoute path="/dialogs" component={Dialogs} />
+                <Suspense fallback={<Loader />}>
+                  <Route exact path="/login">
+                    <Login />
+                  </Route>
+                  <Route path="/users">
+                    <UsersContainer />
+                  </Route>
+                  <Route
+                    exect
+                    path="/profile/:profileId?"
+                    component={Profile}
+                  />
+                  <PrivateRoute path="/dialogs" component={Dialogs} />
+                </Suspense>
               </Switch>
             </main>
 

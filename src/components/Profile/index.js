@@ -8,9 +8,11 @@ import {
   getProfileStatusThunkCreator,
   getProfileThunkCreator,
   updateProfileStatusThunkCreator,
+  saveProfilePhotoThunkCreator,
+  saveProfileThunkCreator,
 } from "../../redux/profileReducer";
 import { getProfile, getStatus } from "../../redux/profileSelector";
-import { getAuthorizedUserId, getIsAuth } from "../../redux/authSelector";
+import { getAuthorizedUserId } from "../../redux/authSelector";
 
 import styles from "./profile.module.scss";
 
@@ -19,14 +21,11 @@ const Profile = () => {
   const history = useHistory();
   const { profileId } = useParams();
 
-  const { profile, status, authorizedUserId, isAuth } = useSelector(
-    (state) => ({
-      profile: getProfile(state),
-      status: getStatus(state),
-      authorizedUserId: getAuthorizedUserId(state),
-      isAuth: getIsAuth(state),
-    })
-  );
+  const { profile, status, authorizedUserId } = useSelector((state) => ({
+    profile: getProfile(state),
+    status: getStatus(state),
+    authorizedUserId: getAuthorizedUserId(state),
+  }));
 
   const userId = profileId ? profileId : authorizedUserId;
 
@@ -47,6 +46,12 @@ const Profile = () => {
   const updateProfileStatusThunk = (status) =>
     dispatch(updateProfileStatusThunkCreator(status));
 
+  const saveProfilePhotoThunk = (file) =>
+    dispatch(saveProfilePhotoThunkCreator(file));
+
+  const saveProfileThunk = (profile) =>
+    dispatch(saveProfileThunkCreator(profile));
+
   useEffect(() => {
     userId ? getProfileThunk(userId) : history.push("/login");
   }, [history, getProfileThunk, userId]);
@@ -58,9 +63,12 @@ const Profile = () => {
   return (
     <section className={styles.profile}>
       <ProfileInfo
+        isOwner={!profileId}
         profile={profile}
         status={status}
         updateProfileStatusThunk={updateProfileStatusThunk}
+        saveProfilePhotoThunk={saveProfilePhotoThunk}
+        saveProfileThunk={saveProfileThunk}
       />
       <MyPosts />
     </section>

@@ -1,9 +1,11 @@
 import { profileAPI } from "../api/api";
+import { stopSubmit } from "redux-form";
 
 const ADD_POST = "ADD_POST";
 const SET_USER_PROFILE = "SET_USER_PROFILE";
 const SET_STATUS = "SET_STATUS";
 const DELETE_POST = "DELETE_POST";
+const SAVE_PHOTOS = "SAVE_PHOTOS";
 
 const initialState = {
   postData: [
@@ -40,6 +42,9 @@ const profileReducer = (state = initialState, action) => {
     case SET_STATUS:
       return { ...state, status: action.status };
 
+    case SAVE_PHOTOS:
+      return { ...state, profile: { ...state.profile, photos: action.photos } };
+
     default:
       return state;
   }
@@ -65,6 +70,11 @@ export const setProfileStatusAction = (status) => ({
   status,
 });
 
+export const savePhotoAction = (photos) => ({
+  type: SAVE_PHOTOS,
+  photos,
+});
+
 export const getProfileThunkCreator = (id) => async (dispatch) => {
   const res = await profileAPI.getProfile(id);
   dispatch(setUserProfileAction(res.data));
@@ -79,6 +89,24 @@ export const updateProfileStatusThunkCreator = (status) => async (dispatch) => {
   const res = await profileAPI.updateStatus(status);
   if (res.data.resultCode === 0) {
     dispatch(setProfileStatusAction(status));
+  }
+};
+
+export const saveProfilePhotoThunkCreator = (file) => async (dispatch) => {
+  const res = await profileAPI.savePhoto(file);
+  if (res.data.resultCode === 0) {
+    dispatch(savePhotoAction(res.data.data.photos));
+  }
+};
+
+export const saveProfileThunkCreator = (profile) => async (dispatch) => {
+  // const userId = getState().auth.userId;
+  const res = await profileAPI.saveProfile(profile);
+  if (res.data.resultCode === 0) {
+    dispatch(getProfileThunkCreator(profile.userId));
+  } else {
+    dispatch(stopSubmit("editProfile", { _error: res.data.messages[0] }));
+    return Promise.reject(res.data.messages[0])
   }
 };
 

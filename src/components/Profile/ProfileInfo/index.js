@@ -1,16 +1,36 @@
-import React from "react";
+import React, { useState } from "react";
 
 import styles from "./profileInfo.module.scss";
 import Loader from "../../common/Loader";
-import ProfileStatus from "./profielStatus";
+import ProfileStatus from "./ProfielStatus";
+import ProfileData from "./ProfileData";
+import ProfileDataForm from "./ProfileDataForm";
 
 const ProfileInfo = ({
   profile,
   status,
-  updateProfileStatusThunk
+  updateProfileStatusThunk,
+  isOwner,
+  saveProfilePhotoThunk,
+  saveProfileThunk,
 }) => {
-  
   const defaultAvatar = "https://image.freepik.com/free-vector/_9385-36.jpg";
+  const [editMode, setEditMode] = useState(false);
+
+  const handleEditProfile = () => setEditMode(true);
+
+  const onMainPhotoSelected = ({ target }) => {
+    if (target.files.length) {
+      saveProfilePhotoThunk(target.files[0]);
+    }
+  };
+
+  const onSubmit = (formData) => {
+    saveProfileThunk(formData).then(() => {
+      setEditMode(false);
+    });
+  };
+
   return (
     <div className={styles.profileInfo}>
       <div>
@@ -30,18 +50,27 @@ const ProfileInfo = ({
       ) : (
         <div className={styles.description}>
           <img src={profile.photos.small || defaultAvatar} alt="avatar" />
-          <div>
-            <p>Full Name: {profile.fullName}</p>
-            <p>About me: {profile.aboutMe}</p>
-            <div>
-              Contacts:
-              {Object.entries(profile.contacts).map(([key, value]) => (
-                <p key={key}>
-                  <span>{key}</span>: <span>{value}</span>
-                </p>
-              ))}
-            </div>
-          </div>
+          {isOwner && (
+            <input
+              type="file"
+              accept="image/*"
+              onChange={onMainPhotoSelected}
+            />
+          )}
+          {editMode ? (
+            <ProfileDataForm
+              initialValues={profile}
+              profile={profile}
+              isOwner={isOwner}
+              onSubmit={onSubmit}
+            />
+          ) : (
+            <ProfileData
+              profile={profile}
+              isOwner={isOwner}
+              handleEditProfile={handleEditProfile}
+            />
+          )}
         </div>
       )}
     </div>

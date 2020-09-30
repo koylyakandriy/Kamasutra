@@ -51,7 +51,6 @@ const UsersContainer = () => {
     [dispatch]
   );
 
- 
   useEffect(() => {
     getUsersThunk(currentPage, pageSize);
   }, [getUsersThunk, currentPage, pageSize]);

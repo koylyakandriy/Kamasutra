@@ -1,9 +1,12 @@
 .paginator {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 15px;
   span {
     padding: 5px;
     cursor: pointer;
+    border: 1px solid gray;
   }
   .active {
     font-weight: bold;

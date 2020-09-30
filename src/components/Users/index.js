@@ -29,7 +29,7 @@ const Users = ({
       <Paginator
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
-        totalUsers={totalUsers}
+        totalItems={totalUsers}
         pageSize={pageSize}
       />
 

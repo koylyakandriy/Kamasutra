@@ -12,7 +12,6 @@ const ProfileDataForm = ({
   handleSubmit,
   error,
 }) => {
-  console.log('error', error)
   return (
     <form onSubmit={handleSubmit}>
       {isOwner && <button onClick={saveProfile}>Save Profile</button>}

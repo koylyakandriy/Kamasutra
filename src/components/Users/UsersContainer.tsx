@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, FC } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import Users from "./index";
@@ -17,8 +17,19 @@ import {
   getTotalUsers,
   getUsers,
 } from "../../redux/usersSelector";
+import { UserType } from "../../types/types";
+import { AppStateType } from "../../redux/redux-store";
 
-const UsersContainer = () => {
+type PropsType = {
+  users: Array<UserType>;
+  pageSize: number;
+  totalUsers: number;
+  currentPage: number;
+  isFetching: boolean;
+  followingInProgress: Array<number>;
+};
+
+const UsersContainer: FC<PropsType> = () => {
   const dispatch = useDispatch();
 
   const {
@@ -28,7 +39,7 @@ const UsersContainer = () => {
     currentPage,
     isFetching,
     followingInProgress,
-  } = useSelector((state) => ({
+  } = useSelector((state: AppStateType) => ({
     users: getUsers(state),
     pageSize: getPageSize(state),
     totalUsers: getTotalUsers(state),
@@ -37,11 +48,11 @@ const UsersContainer = () => {
     followingInProgress: getFollowingInProgress(state),
   }));
 
-  const setCurrentPage = (page) => dispatch(setCurrentPageAction(page));
+  const setCurrentPage = (page: number) => dispatch(setCurrentPageAction(page));
 
-  const successFollowThunk = (isFetching, userId) =>
+  const successFollowThunk = (isFetching: boolean, userId: number) =>
     dispatch(successFollowThunkCreator(isFetching, userId));
-  const successUnfollowThunk = (isFetching, userId) =>
+  const successUnfollowThunk = (isFetching: boolean, userId: number) =>
     dispatch(successUnfollowThunkCreator(isFetching, userId));
 
   const getUsersThunk = useCallback(

@@ -1,9 +1,19 @@
-import React from "react";
+import React, { FC } from "react";
 import { NavLink } from "react-router-dom";
+
+import { UserType } from "../../types/types";
 
 import styles from "./users.module.scss";
 
-const User = ({
+type PropsType = {
+  user: UserType;
+  defaultPhoto: string;
+  onUnfollow: (userId: number) => void;
+  onFollow: (userId: number) => void;
+  followingInProgress: Array<number>;
+};
+
+const User: FC<PropsType> = ({
   user,
   defaultPhoto,
   onUnfollow,

@@ -1,10 +1,24 @@
-import React from "react";
+import React, { FC } from "react";
 
-import styles from "./users.module.scss";
 import Paginator from "../common/Paginator/Paginator";
 import User from "./User";
+import { UserType } from "../../types/types";
 
-const Users = ({
+import styles from "./users.module.scss";
+
+type PropsType = {
+  users: Array<UserType>;
+  currentPage: number;
+  setCurrentPage: (pageNumber: number) => void;
+  totalUsers: number;
+  pageSize: number;
+  successFollowThunk: (isFetching: boolean, userId: number) => void;
+  successUnfollowThunk: (isFetching: boolean,userId: number) => void;
+  followingInProgress: Array<number>;
+  isFetching: boolean
+};
+
+const Users: FC<PropsType> = ({
   users,
   currentPage,
   setCurrentPage,
@@ -13,15 +27,16 @@ const Users = ({
   successFollowThunk,
   successUnfollowThunk,
   followingInProgress,
+                                isFetching
 }) => {
   const defaultPhoto = "https://image.freepik.com/free-vector/_9385-36.jpg";
 
-  const onFollow = (userId) => {
-    successFollowThunk(userId);
+  const onFollow = (userId: number) => {
+    successFollowThunk(isFetching, userId);
   };
 
-  const onUnfollow = (userId) => {
-    successUnfollowThunk(userId);
+  const onUnfollow = (userId: number) => {
+    successUnfollowThunk(isFetching, userId);
   };
 
   return (

@@ -1,6 +1,6 @@
 import { followAPI, usersAPI } from "../api/api";
 import { updateObjectInArray } from "../utils/ObjectHelper";
-import { PhotosType } from "../types/types";
+import { UserType } from "../types/types";
 
 const FOLLOW = "FOLLOW";
 const UNFOLLOW = "UNFOLLOW";
@@ -9,13 +9,6 @@ const SET_CURRENT_PAGE = "SET_CURRENT_PAGE";
 const SET_TOTAL_USERS = "SET_TOTAL_USERS";
 const TOGGLE_IS_FETCHING = "TOGGLE_IS_FETCHING";
 const TOGGLE_FOLLOWING_IN_PROGRESS = "TOGGLE_FOLLOWING_IN_PROGRESS";
-
-type UserType = {
-  id: number;
-  name: string;
-  status: string;
-  photos: PhotosType;
-};
 
 const initialState = {
   users: [] as Array<UserType>,
@@ -181,15 +174,17 @@ const followUnfollowFlow = async (
   dispatch(toggleFollowingProgressAction(false, userId));
 };
 
-export const successFollowThunkCreator = (userId: number) => async (
-  dispatch: any
-) => {
+export const successFollowThunkCreator = (
+  isFetching: boolean,
+  userId: number
+) => async (dispatch: any) => {
   await followUnfollowFlow(dispatch, userId, followAPI.onFollow, followAction);
 };
 
-export const successUnfollowThunkCreator = (userId: number) => async (
-  dispatch: any
-) => {
+export const successUnfollowThunkCreator = (
+  isFetching: boolean,
+  userId: number
+) => async (dispatch: any) => {
   await followUnfollowFlow(
     dispatch,
     userId,

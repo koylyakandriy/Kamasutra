@@ -1,18 +1,15 @@
-import { authAPI, securityAPI } from "../api/api";
+import {
+  authAPI,
+  ResultCodeEnum,
+  ResultCodeForCaptchaEnum,
+  securityAPI,
+} from "../api/api";
 import { stopSubmit } from "redux-form";
 
 const SET_USER_DATE = "SET_USER_DATE";
 const GET_CAPTCHA_URL = "GET_CAPTCHA_URL";
 
-export type InitialStateType = {
-  userId: number | null;
-  email: string | null;
-  login: string | null;
-  isAuth: boolean;
-  captchaUrl: string | null;
-};
-
-const initialState: InitialStateType = {
+const initialState = {
   userId: null,
   email: null,
   login: null,
@@ -20,7 +17,16 @@ const initialState: InitialStateType = {
   captchaUrl: null,
 };
 
-const authReducer = (state = initialState, action: any): InitialStateType => {
+type InitialStateType = typeof initialState;
+type ActionsTypes =
+  | SetAuthUserDataActionPayloadType
+  | SetAuthUserDataActionType
+  | GetCaptchaUrlActionType;
+
+const authReducer = (
+  state = initialState,
+  action: ActionsTypes | any
+): InitialStateType => {
   switch (action.type) {
     case SET_USER_DATE:
     case GET_CAPTCHA_URL:
@@ -37,12 +43,10 @@ type SetAuthUserDataActionPayloadType = {
   login: string | null;
   isAuth: boolean;
 };
-
 type SetAuthUserDataActionType = {
   type: typeof SET_USER_DATE;
   data: SetAuthUserDataActionPayloadType;
 };
-
 export const setAuthUserDataAction = (
   userId: number | null,
   email: string | null,
@@ -57,7 +61,6 @@ type GetCaptchaUrlActionType = {
   type: typeof GET_CAPTCHA_URL;
   data: { captchaUrl: string };
 };
-
 export const getCaptchaUrlAction = (
   captchaUrl: string
 ): GetCaptchaUrlActionType => ({
@@ -67,8 +70,8 @@ export const getCaptchaUrlAction = (
 
 export const getAuthUserDataThunkCreator = () => async (dispatch: any) => {
   const res = await authAPI.getMyProfile();
-  if (res.data.resultCode === 0) {
-    const { login, id, email } = res.data.data;
+  if (res.resultCode === ResultCodeEnum.Success) {
+    const { login, id, email } = res.data;
     dispatch(setAuthUserDataAction(id, email, login, true));
   }
 };
@@ -80,14 +83,14 @@ export const loginThunkCreator = (
   captcha: string
 ) => async (dispatch: any) => {
   const res = await authAPI.login(email, password, rememberMe, captcha);
-  if (res.data.resultCode === 0) {
+  if (res.resultCode === ResultCodeEnum.Success) {
     dispatch(getAuthUserDataThunkCreator());
   } else {
-    if (res.data.resultCode === 10) {
+    if (res.resultCode === ResultCodeForCaptchaEnum.CaptchaISRequired) {
       dispatch(getCaptchaUrlThunkCreator());
     }
     const errorMessage =
-      res.data.messages.length > 0 ? res.data.messages[0] : "Some error";
+      res.messages.length > 0 ? res.messages[0] : "Some error";
     dispatch(stopSubmit("login", { _error: errorMessage }));
   }
 };
@@ -100,7 +103,7 @@ export const getCaptchaUrlThunkCreator = () => async (dispatch: any) => {
 
 export const logoutThunkCreator = () => async (dispatch: any) => {
   const res = await authAPI.logout();
-  if (res.data.resultCode === 0) {
+  if (res.data.resultCode === ResultCodeEnum.Success) {
     dispatch(setAuthUserDataAction(null, null, null, false));
   }
 };

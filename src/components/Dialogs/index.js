@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import DialogItem from "./DialogItem";
 import Message from "./Messages";
 import MessageForm from "./MessageForm";
-import { sendMessageAction } from "../../redux/messagesReducer";
+import { actions } from "../../redux/messagesReducer";
 import { getDialogData, getMessageData } from "../../redux/messagesSelector";
 
 import styles from "./dialogs.module.scss";
@@ -17,7 +17,7 @@ const Dialogs = () => {
   }));
 
   const onSendMessage = (formData) => {
-    dispatch(sendMessageAction(formData.newMessageText));
+    dispatch(actions.sendMessageAction(formData.newMessageText));
   };
 
   return (

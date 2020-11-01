@@ -1,13 +1,8 @@
-import {
-  authAPI,
-  ResultCodeEnum,
-  ResultCodeForCaptchaEnum,
-  securityAPI,
-} from "../api/api";
+import { ResultCodeEnum, ResultCodeForCaptchaEnum } from "../api/api";
 import { stopSubmit } from "redux-form";
-
-const SET_USER_DATE = "SET_USER_DATE";
-const GET_CAPTCHA_URL = "GET_CAPTCHA_URL";
+import { authAPI } from "../api/auth-api";
+import { securityAPI } from "../api/security-api";
+import { BaseThunkActionType, InformActionsTypes } from "./redux-store";
 
 const initialState = {
   userId: null,
@@ -18,18 +13,18 @@ const initialState = {
 };
 
 type InitialStateType = typeof initialState;
-type ActionsTypes =
-  | SetAuthUserDataActionPayloadType
-  | SetAuthUserDataActionType
-  | GetCaptchaUrlActionType;
+type ActionsType = InformActionsTypes<typeof actions>;
+type ThunkActionType = BaseThunkActionType<
+  ActionsType | ReturnType<typeof stopSubmit>
+>;
 
 const authReducer = (
   state = initialState,
-  action: ActionsTypes | any
+  action: ActionsType | any
 ): InitialStateType => {
   switch (action.type) {
-    case SET_USER_DATE:
-    case GET_CAPTCHA_URL:
+    case "SN/AUTH/SET_USER_DATE":
+    case "SN/AUTH/GET_CAPTCHA_URL":
       return { ...state, ...action.data };
 
     default:
@@ -37,42 +32,31 @@ const authReducer = (
   }
 };
 
-type SetAuthUserDataActionPayloadType = {
-  userId: number | null;
-  email: string | null;
-  login: string | null;
-  isAuth: boolean;
+export const actions = {
+  setAuthUserDataAction: (
+    userId: number | null,
+    email: string | null,
+    login: string | null,
+    isAuth: boolean
+  ) =>
+    ({
+      type: "SN/AUTH/SET_USER_DATE",
+      data: { userId, email, login, isAuth },
+    } as const),
+  getCaptchaUrlAction: (captchaUrl: string) =>
+    ({
+      type: "SN/AUTH/GET_CAPTCHA_URL",
+      data: { captchaUrl },
+    } as const),
 };
-type SetAuthUserDataActionType = {
-  type: typeof SET_USER_DATE;
-  data: SetAuthUserDataActionPayloadType;
-};
-export const setAuthUserDataAction = (
-  userId: number | null,
-  email: string | null,
-  login: string | null,
-  isAuth: boolean
-): SetAuthUserDataActionType => ({
-  type: SET_USER_DATE,
-  data: { userId, email, login, isAuth },
-});
 
-type GetCaptchaUrlActionType = {
-  type: typeof GET_CAPTCHA_URL;
-  data: { captchaUrl: string };
-};
-export const getCaptchaUrlAction = (
-  captchaUrl: string
-): GetCaptchaUrlActionType => ({
-  type: GET_CAPTCHA_URL,
-  data: { captchaUrl },
-});
-
-export const getAuthUserDataThunkCreator = () => async (dispatch: any) => {
+export const getAuthUserDataThunkCreator = (): ThunkActionType => async (
+  dispatch
+) => {
   const res = await authAPI.getMyProfile();
   if (res.resultCode === ResultCodeEnum.Success) {
     const { login, id, email } = res.data;
-    dispatch(setAuthUserDataAction(id, email, login, true));
+    dispatch(actions.setAuthUserDataAction(id, email, login, true));
   }
 };
 
@@ -80,8 +64,8 @@ export const loginThunkCreator = (
   email: string,
   password: string,
   rememberMe: boolean,
-  captcha: string
-) => async (dispatch: any) => {
+  captcha: string | null
+): ThunkActionType => async (dispatch) => {
   const res = await authAPI.login(email, password, rememberMe, captcha);
   if (res.resultCode === ResultCodeEnum.Success) {
     dispatch(getAuthUserDataThunkCreator());
@@ -95,16 +79,18 @@ export const loginThunkCreator = (
   }
 };
 
-export const getCaptchaUrlThunkCreator = () => async (dispatch: any) => {
+export const getCaptchaUrlThunkCreator = (): ThunkActionType => async (
+  dispatch
+) => {
   const res = await securityAPI.getCaptchaUrl();
-  const captchaUrl = res.data.url;
-  dispatch(getCaptchaUrlAction(captchaUrl));
+  const captchaUrl = res.url;
+  dispatch(actions.getCaptchaUrlAction(captchaUrl));
 };
 
-export const logoutThunkCreator = () => async (dispatch: any) => {
+export const logoutThunkCreator = (): ThunkActionType => async (dispatch) => {
   const res = await authAPI.logout();
   if (res.data.resultCode === ResultCodeEnum.Success) {
-    dispatch(setAuthUserDataAction(null, null, null, false));
+    dispatch(actions.setAuthUserDataAction(null, null, null, false));
   }
 };
 

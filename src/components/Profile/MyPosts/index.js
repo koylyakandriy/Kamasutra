@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import Post from "./Post";
 import PostForm from "../PostForm";
-import { addPostAction } from "../../../redux/profileReducer";
+import { actions } from "../../../redux/profileReducer";
 import { getPostData } from "../../../redux/profileSelector";
 
 import styles from "./myPosts.module.scss";
@@ -14,7 +14,7 @@ const MyPosts = () => {
   const postData = useSelector((state) => getPostData(state));
 
   const addMessage = (formData) => {
-    dispatch(addPostAction(formData.newPostText));
+    dispatch(actions.addPostAction(formData.newPostText));
   };
 
   return (

@@ -6,7 +6,7 @@ import Loader from "../common/Loader";
 import {
   successFollowThunkCreator,
   getUsersThunkCreator,
-  setCurrentPageAction,
+  actions,
   successUnfollowThunkCreator,
 } from "../../redux/usersReducer";
 import {
@@ -48,7 +48,7 @@ const UsersContainer: FC<PropsType> = () => {
     followingInProgress: getFollowingInProgress(state),
   }));
 
-  const setCurrentPage = (page: number) => dispatch(setCurrentPageAction(page));
+  const setCurrentPage = (page: number) => dispatch(actions.setCurrentPageAction(page));
 
   const successFollowThunk = (isFetching: boolean, userId: number) =>
     dispatch(successFollowThunkCreator(isFetching, userId));

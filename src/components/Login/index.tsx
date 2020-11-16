@@ -13,15 +13,6 @@ type MapStatePropsType = {
   captchaUrl: string | null;
 };
 
-type MapDispatchPropsType = {
-  loginThunkCreator: (
-    email: string,
-    password: string,
-    rememberMe: boolean,
-    captcha: string | null
-  ) => void;
-};
-
 export type LoginFormValueType = {
   email: string;
   password: string;
@@ -29,7 +20,7 @@ export type LoginFormValueType = {
   captcha: string | null;
 };
 
-const Login: FC<MapStatePropsType & MapDispatchPropsType> = () => {
+const Login: FC = () => {
   const dispatch = useDispatch();
   const { isAuth, captchaUrl } = useSelector(
     (state): MapStatePropsType => ({

@@ -23,17 +23,16 @@ const reducers = combineReducers({
   form: formReducer,
 });
 
-type PropertiesTypes<T> = T extends { [key: string]: infer U } ? U : never;
-export type InformActionsTypes<
-  T extends { [key: string]: (...args: any[]) => any }
-> = ReturnType<PropertiesTypes<T>>;
+export type InformActionsTypes<T> = T extends {
+  [key: string]: (...args: any[]) => infer U;
+}
+  ? U
+  : never;
 
-export type BaseThunkActionType<A extends Action, R = Promise<void>> = ThunkAction<
-  R,
-  AppStateType,
-  unknown,
-  A
->;
+export type BaseThunkActionType<
+  A extends Action,
+  R = Promise<void>
+> = ThunkAction<R, AppStateType, unknown, A>;
 
 type RootReducerType = typeof reducers;
 export type AppStateType = ReturnType<RootReducerType>;

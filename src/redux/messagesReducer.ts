@@ -25,7 +25,7 @@ const initialState = {
   ] as Array<DialogType>,
 };
 
-type InitialStateType = typeof initialState;
+export type InitialStateType = typeof initialState;
 type ActionsType = InformActionsTypes<typeof actions>;
 
 const messagesReducer = (

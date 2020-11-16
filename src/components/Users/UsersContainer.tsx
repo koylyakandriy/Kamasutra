@@ -17,21 +17,10 @@ import {
   getTotalUsers,
   getUsers,
 } from "../../redux/usersSelector";
-import { UserType } from "../../types/types";
 import { AppStateType } from "../../redux/redux-store";
 
-type PropsType = {
-  users: Array<UserType>;
-  pageSize: number;
-  totalUsers: number;
-  currentPage: number;
-  isFetching: boolean;
-  followingInProgress: Array<number>;
-};
-
-const UsersContainer: FC<PropsType> = () => {
+const UsersContainer: FC = () => {
   const dispatch = useDispatch();
-
   const {
     users,
     pageSize,

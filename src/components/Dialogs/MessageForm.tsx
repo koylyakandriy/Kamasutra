@@ -1,12 +1,12 @@
-import React from "react";
-import { Field, reduxForm } from "redux-form";
+import React, { FC } from "react";
+import { Field, InjectedFormProps, reduxForm } from "redux-form";
 
 import { Textarea } from "../common/FormsControls";
-import { maxLengthCreator, required } from '../../utils/validators';
+import { maxLengthCreator, required } from "../../utils/validators";
 
 const maxLength100 = maxLengthCreator(100);
 
-const MessageForm = ({ handleSubmit }) => {
+const MessageForm: FC<InjectedFormProps> = ({ handleSubmit }) => {
   return (
     <form onSubmit={handleSubmit}>
       <Field
